@@ -72,20 +72,22 @@ function playGame() {
           computerChoice.classList.remove("winner");
         } else if (winnerObj[p1].includes(p2)) {
           score++;
-          player1score.innerText = score;
           chosenCircle.classList.add(p1Choice, "winner");
           computerChoice.classList.remove("winner");
           message.querySelector("h1").innerText = "you win";
           step2.classList.add("finish");
         } else {
           score--;
-          player1score.innerText = score;
           computerChoice.classList.add("winner");
           chosenCircle.classList.remove("winner");
           message.querySelector("h1").innerText = "you lose";
           step2.classList.add("finish");
         }
         message.style.visibility = "visible";
+        player1score.innerText = score;
+        if (isTest()) {
+          localStorage.setItem("score", score);
+        }
       };
       evalWinner(p1Choice, p2Choice);
     }, 1000);
@@ -93,3 +95,24 @@ function playGame() {
 }
 
 playGame();
+
+// Test IF LocalStorage is accessible
+function isTest() {
+  let test = "test";
+  try {
+    localStorage.setItem(test, test);
+    localStorage.removeItem(test);
+    return true;
+  } catch (e) {
+    return false;
+  }
+}
+
+window.addEventListener("load", () => {
+  if (isTest()) {
+    const dataFromStorage = localStorage.getItem("score");
+    if (dataFromStorage) {
+      player1score.innerText = dataFromStorage;
+    }
+  }
+});
